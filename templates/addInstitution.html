@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+    <form action="/addInstitution" method="post">
+        <div class="mb-3"></div>
+            <input list="institutions" class="form-control mx-auto w-auto" name="institutionName" placeholder="Institution Name" type="text" minlength="1" maxlength="54" required />
+            <datalist id="institutions">
+                {% for institution in listOfInstitutions %}
+                <option value="{{ institution }}">
+                {% endfor %}
+            </datalist>
+            <div class="mb-3">
+                <input class="form-control mx-auto w-auto" min="1" name="accountNumber" placeholder="Account Number" type="number" required />
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Add Institution</button>
+    </form>
+{% endblock %}

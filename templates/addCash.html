@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Change Password
+{% endblock %}
+
+{% block main %}
+<form style="float:center;" action="/addCash" method="post">
+    <div class="mb-3">
+        <select class="form-select mx-auto w-auto" style="display:inline;" name="institutionAccount">
+            <option disabled="" selected="">Source Account</option>
+            {% for institution in userInstitutions %}
+                <option value="{{ institution.institutionName }} ({{ institution.accountNumber }})">{{ institution.institutionName }} ({{ institution.accountNumber }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" class="form-control mx-auto w-auto" min="1" name="cashAmount" placeholder="cashAmount" type="number">
+    </div>
+    <button class="btn btn-primary" type="submit">Add Cash</button>
+</form>
+<form style="float:center;" action="/addInstitutionFromCash" method="post">
+    <!-- I tried to put this button next to "institution" choice with style="float:left", but then it completely screws up footer placement-->
+    <div class="mb-3">
+        <button class="btn btn-secondary" type="submit">Add Financial Institution</button>
+    </div>
+</form>
+<div style="float:center;" class="mb-3">
+    <p style="float:center;"></p>
+</div>
+{% endblock %}

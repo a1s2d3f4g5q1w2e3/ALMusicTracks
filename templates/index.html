@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+<styke>
+    #nomargin {
+        margin-left: 0px;
+    }
+</styke>
+{% block main %}
+<span>Search:<b>To avoid slow response, avoid loading the full database into the table.</b><br></span>
+<span><i>Top row</i> - search results column selection (enter 1 to select). (If none selected, all columns are displayed). </span>
+<span><i>Middle row</i> for specific queries. Optional <i>bottom row</i> to find a range. <b>Text is NOT case-sensitive.</b><br></span>
+<form action="/searchPeople" method="post">
+    <table class="table table-striped" id="nomargin">
+        <thead>
+            <tr>
+                {% for col in headings %}
+                <th style="text-align:left; " class="text-start">{{ col.head }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <input type="checkbox" name="incl_refs" id="incl_refs" />
+            <label for="incl_refs">Include refs?</label>
+            {% for searchFields in allSearchRows %} <!-- Bottom two table rows allow us to enter the values to perform a search  -->
+                <tr class="item">
+                {% set i = loop.index %}
+                    {% for sf in searchFields %}
+                        {% if "evtTimeYgr" in sf.name %}
+                            {% if "DobT" in sf.name %}
+                                {% set optionalid = 'id=' ~ 'dobYearGr' ~ i %} {# https://stackoverflow.com/questions/48002297/how-to-concatenate-int-with-str-type-in-jinja2-template #}
+                            {% elif "DodT" in sf.name %}
+                                {% set optionalid = 'id=' ~ 'dodYearGr' ~ i %}
+                            {% endif %}
+                        {% endif %}
+                        {% if i == 1 %}
+                            {% set ph = sf.ph1 %}
+                            {% set optionalmin = 'min=1' %}
+                            {% set optionalmax = 'max=1' %}
+                            {% set type = "number" %}
+                        {% else %} {# i == 2 or 3 #}
+                            {% if sf.min == "" %}
+                                {% set optionalmin = '' %}
+                                {% set optionalmax = '' %}
+                            {% else %}
+                                {% set optionalmin = 'min=' ~ sf.min %}
+                                {% set optionalmax = 'max=' ~ sf.max %}
+                            {% endif %}
+                            {% set ph = sf.ph1 %}
+                            {% set type = sf.type %}
+                        {% endif %}
+                        {% set styleCmd = 'style=width:' + sf.width + 'px' %}
+                        <td class="text-center">
+                            <input  class="wontuseform-control mx-auto"
+                                    {{ styleCmd }}
+                                    onfocus="this.placeholder = ''"
+                                    {{ optionalid }}
+                                    name="{{ sf.name }}{{ i }}"
+                                    value="{{ ph }}"
+                                    placeholder="{{ ph }}"
+                                    type="{{ type }}"
+                                    {{ optionalmin }}
+                                    {{ optionalmax }}
+                                    >
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+    <span><small>*DOB and DOD flags:"born": <b>b.</b>; "died": <b>d.</b>; "circa": <b>c.</b>; "guess": <b>g.</b>; "flourished during those years, assumed to have been born 25 years earlier": <b>f.[years]->b.</b>, etc.</small></span>
+    <button type="submit">Search</button>
+</form>
+<hr>
+{% if afterResults %}{# Any results following the database search will be displayed in an interactive table here #}
+Results:<br>
+<form action="/updateDatabase" method="post"> {# Any user edits will be submitted to /updateDatabase route in app.py#}
+    <table class="table table-striped" id="sortableTable">
+        <thead>
+            <tr>
+            {% for colHead in chosenColsHeads %}
+                <th style="cursor:pointer;" onclick="sortHTML( '#sortableTable', '.item', 'td:nth-child( {{ loop.index }} )', 1000 )" class="text-center">{{ colHead }}↕</th> <!-- add 1000 to the last sortHTML parameter to go into the child text, if an input box-->
+            {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for dict1 in searchResults %}
+                {% set i = loop.index %}
+                {% set personId = dict1.personId %}
+                <tr class="item">
+                {% for colName in dict1 %}
+                    {% set value = dict1.get(colName) %}
+                    {% if "evtTimeY" in colName %}
+                        {% set optionalMin = 'min=-9999' %}
+                        {% set optionalMax = 'max=2025' %} {# TODO: have a way of using current year as the maximum value #}
+                        {% set type = 'number' %}
+                    {% elif "evtTimeM" in colName %}
+                        {% set optionalMin = 'min=1' %}
+                        {% set optionalMax = 'max=12' %}
+                        {% set type = 'number' %}
+                    {% elif "evtTimeD" in colName %}
+                        {% set optionalMin = 'min=1' %}
+                        {% set optionalMax = 'max=31' %}
+                        {% set type = 'number' %}
+                    {% else %}
+                        {% set optionalMin = '' %}
+                        {% set optionalMax = '' %}
+                        {% set type = 'text' %}
+                    {% endif %}
+                    {% if value == None %}          {# if the database has nothing, db.execute sets the value to "None". I just want to show nothing. #}
+                        {% set value = "" %}
+                    {% endif %}
+                    {% set value = value|replace("%27", "'") %}             {# displaying all apostrophes correctly #}
+                    {% set value = value|replace("%22", '"') %}             {# displaying all double quotes correctly #}
+                    {% if "personId" != colName %}                          {# dict1 contains the personId number for database interaction, which I don't want to display #}
+                        {% set styleCmd = 'style=width:' + '100' + 'px' %}  {# TODO: '100' must get set dynamically. tbd how #}
+                        {% if not "http" in value %} {# Any http links will be a href elements, not "input" #}
+                            <td class="text-center">
+                                <input  class="wontuseform-control mx-auto"
+                                        {{ styleCmd }}
+                                        onfocus="this.placeholder = ''"
+                                        name="{{ colName }}__personId{{ personId }}__origval{{ value }}"
+                                        value="{{ value }}"
+                                        placeholder="{{ value }}"
+                                        type="{{ type }}"
+                                        {{ optionalMin }}
+                                        {{ optionalMax }}
+                                        >
+                        {% else %} {# displaying all http urls correctly #}
+                            <td class="text-center">
+                                <a href="{{ value }}">W</a>
+                            </td>
+                        {% endif %} {# END OF http yes no #}
+                    {% endif %} {# END OF dict1 contains the personId number for database interaction, which I don't want to display #}
+                    </td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Submit any changed values to update the database</button>
+</form>
+{% else %}
+    Search results will appear here.
+{% endif %}
+<hr>
+{% endblock %}
