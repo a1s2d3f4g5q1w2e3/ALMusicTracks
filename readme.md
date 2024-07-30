@@ -290,7 +290,8 @@ Besides the unique id column, refsT table contains columns for encoding the URL 
 
 Because the design of the project began around the processing of Wikipedia data, it was convenient to split Wikipedia's permanent URL into four parts: URL root (urlRoot), URL main value (urlMain), URL suffix (urlSuffix) and URL suffix value (urlSuffixVal). For example,
 
-```   https://en.wikipedia.org/w/index.php?title=Thorvald_Aagaard&oldid=1212139107
+```
+https://en.wikipedia.org/w/index.php?title=Thorvald_Aagaard&oldid=1212139107
 ```
 In this URL:
 - urlRoot is "https://en.wikipedia.org/w/index.php?title="
