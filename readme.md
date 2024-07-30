@@ -401,7 +401,8 @@ Once it's loaded, Flask allows a specific URL to be used to execute the code in 
 @app.route("/")
 @login_required
 def index():
-```, 
+```
+, 
 
 which ends up serving index.html to the user.
 
