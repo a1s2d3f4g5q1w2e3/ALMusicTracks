@@ -1,0 +1,3 @@
+url,type,tempSummaryCsv,peopleTableFileName,urlRootsTableFileName,urlSuffixesTableFileName
+"https://en.wikipedia.org/wiki/List_of_composers_by_name",summaryPage,tempSummary.csv,peopleFromWebScraping.csv,urlRootsManualEntries.csv,urlSuffixesManualEntries.csv
+"https://someotherresource.com",summaryPage,tempSummary2.csv,peopleFromWebScraping2.csv,urlRootsManualEntries2.csv,urlSuffixesManualEntries2.csv

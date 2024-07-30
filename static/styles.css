@@ -1,0 +1,67 @@
+/* a bunch of global variables to use for my html tables */
+:root { /* Managed to figure out how to use JS instead with python and jinja code*/
+    --lst-name-w: 100px;
+    --fst-name-w: 80px;
+    --mid-name-w: 80px;
+    --full-name-eng-w: 80px;
+    --full-name-orig-lang-w: 80px;
+    --gender-w: 60px;
+    --dob-y-w: 90px;
+    --dob-m-w: 60px;
+    --dob-d-w: 60px;
+    --pob-now-w: 100px;
+    --dod-y-w: 90px;
+    --dod-m-w: 60px;
+    --dod-d-w: 60px;
+    --pod-now-w: 100px;
+    --occupation-w: 100px;
+}
+
+/* Size for brand */
+nav .navbar-brand
+{
+    font-size: xx-large;
+}
+
+/* Colors for brand */
+nav .navbar-brand .blue
+{
+    color: #537fbe;
+}
+nav .navbar-brand .red
+{
+    color: #ea433b;
+}
+nav .navbar-brand .yellow
+{
+    color: #f5b82e;
+}
+nav .navbar-brand .green
+{
+    color: #2e944b;
+}
+
+body
+{
+    margin-left: 51 !important;
+    position: absolute; /*amazing - this was the only thing that overrode bootstrap. And trying it anywhere other than body so far failed*/
+}
+
+#nomargin
+{
+    margin-left: 10 !important;
+    /*position: absolute; /*amazing - this was the only thing that overrode bootstrap */
+}
+
+#nomargin2
+{
+    margin-left: 0 !important;
+    padding: 0px;
+
+}
+
+th { /* allows me to see the heading for a table as I scroll - https://stackoverflow.com/questions/24840074/how-to-stick-table-headerthead-on-top-while-scrolling-down-the-table-rows-with */
+    position: sticky;
+    top: 50px;
+    background: white;
+  }
