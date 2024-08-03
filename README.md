@@ -45,7 +45,7 @@ In other words, I want to gather a lot of facts online and I write programming c
 
 ## Initial project steps overview ##
 
-I began by looking at a kind of "summary page" on [Wikipedia][] - a list of thousands of wiki links to individual composer pages - and writing a Python module (~/Webscraping/) that retrieves data items like names, birthdays, etc. for each listed composer. 
+I began by looking at a kind of "summary page" on [Wikipedia][] - a list of thousands of wiki links to individual composer pages - and writing a Python module (~/webScraping/) that retrieves data items like names, birthdays, etc. for each listed composer. 
 
 [Wikipedia]: https://en.wikipedia.org/wiki/List_of_composers_by_name
 
@@ -472,7 +472,7 @@ In the "Future" section, you can read about how I want to move away from simply 
 
 # Full Names #
 
-As mentioned in the Webscraping section, this table is currently full of incorrect data. As you will read in the "Future" section, this should be fixed programmatically, but at the moment it can also be fixed with a manual update by going to the provided ref link, for example, and copy-pasting the correct full name from there.
+As mentioned in the webScraping section, this table is currently full of incorrect data. As you will read in the "Future" section, this should be fixed programmatically, but at the moment it can also be fixed with a manual update by going to the provided ref link, for example, and copy-pasting the correct full name from there.
 
 # peopleNamesFullBirthDocT #
 
